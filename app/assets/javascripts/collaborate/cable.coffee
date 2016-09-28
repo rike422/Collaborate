@@ -18,8 +18,8 @@ Collaborate.Cable = class Cable
     delete @attributeCables[attribute]
 
   connected: =>
-    # This shouldn't be necessary, but ActionCable doesn't seem to be able
-    # to cope with finding the session immediately yet.
+# This shouldn't be necessary, but ActionCable doesn't seem to be able
+# to cope with finding the session immediately yet.
     setTimeout =>
       @subscription.perform 'document', { id: @documentId }
       console.info 'Document Setup Complete'

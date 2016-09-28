@@ -8,12 +8,26 @@ module Collaborate
     end
 
     class_methods do
+
       def collaborative_attributes(*attributes)
         return @collaborative_attributes if attributes.size == 0
 
         @collaborative_attributes = attributes.map(&:to_s)
 
         bind_collaborative_document_attributes
+      end
+
+      def collaborative_id_attribute(attribute = nil)
+        if attribute.blank?
+          return @collaborative_id_attribute || :id
+        end
+        @collaborative_id_attribute ||= attribute
+      end
+
+      def find_by_collaborative_key(key)
+        query = {}
+        query[collaborative_id_attribute] = key
+        document_type.find_by(query)
       end
 
       private
@@ -46,10 +60,14 @@ module Collaborate
       @collaborative_attributes[attribute_name.to_s]
     end
 
+    def collaborative_id
+      @collaborative_id ||= send(self.class.collaborative_id_attribute)
+    end
+
     def apply_operation(data)
       operation = OT::TextOperation.from_a data[:operation]
       attribute = data[:attribute]
-      version   = data[:version]
+      version = data[:version]
 
       collaborative_attribute(attribute).apply_operation(operation, version)
     end

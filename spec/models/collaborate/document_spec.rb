@@ -9,6 +9,10 @@ module Collaborate
       expect(example_class.collaborative_attributes).to match_array ['title', 'body']
     end
 
+    it 'should allow collaborative id attributes do be defined' do
+      expect(example_class.collaborative_attributes).to eq :id
+    end
+
     it 'should define getters for collaborative_attributes' do
       expect(example_instance).to receive_message_chain(:collaborative_attribute, value: 'Test')
       expect(example_instance.collaborative_body).to eq 'Test'
